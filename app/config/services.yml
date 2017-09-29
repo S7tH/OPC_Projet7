@@ -1,0 +1,22 @@
+services:
+    serializer_listener.produces:
+        class: AppBundle\Serializer\Listener\ProducesListener
+        tags:
+            - { name: jms_serializer.event_subscriber }
+            
+    app.exception_subscriber:
+        class: AppBundle\EventSubscriber\ExceptionListener
+        arguments: ['@jms_serializer']
+        tags:
+            - { name: kernel.event_subscriber }
+
+    app.normalizer.resource_validation_exception:
+        class: AppBundle\Normalizer\NotFoundHttpExceptionNormalizer
+        arguments:
+            - { type: 'Symfony\Component\HttpKernel\Exception\NotFoundHttpException'  }
+        tags:
+            - { name: app.normalizer }
+    
+    bilemo_authenticator:
+        class: AppBundle\Security\BilemoAuthenticator
+    
