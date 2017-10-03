@@ -14,7 +14,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 
 /**
- * @Route("/api")
+ * @Route("/")
  */
 class UserController extends FOSRestController
 {

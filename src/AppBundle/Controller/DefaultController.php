@@ -19,6 +19,6 @@ class DefaultController extends Controller
         {
             return $this->redirectToRoute('fos_user_security_login');
         }
-            return $this->render('default/test.html.twig');
+            return $this->render('default/index.html.twig');
     }
 }

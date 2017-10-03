@@ -2,73 +2,64 @@
 
 namespace AppBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
-use FOS\UserBundle\Model\User as BaseUser;
-
-use Hateoas\Configuration\Annotation as Hateoas;
-use JMS\Serializer\Annotation as Serializer;
-
-/**
- * User
- *
- * @ORM\Table(name="`user`")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
- *
- * @Serializer\ExclusionPolicy("ALL")
- * 
- * @Hateoas\Relation(
- *      "self",
- *      href = @Hateoas\Route(
- *          "app_user_show",
- *          parameters = { "id" = "expr(object.getId())"},
- *          absolute = true
- *      )
- * )
- */
-class User extends BaseUser
+class User implements UserInterface
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    protected $id;
+    private $username;
+    private $fullname;
+    private $email;
+    private $avatarUrl;
+    private $profileHtmlUrl;
 
-    /**
-     * @var string
-     * @Serializer\Expose
-     */
-     protected $username;
-    
-    /**
-     * @var string
-     * @Serializer\Expose
-     */
-    protected $email;
+    public function __construct($username, $fullname, $email, $avatarUrl, $profileHtmlUrl)
+    {
+        $this->username = $username;
+        $this->fullname = $fullname;
+        $this->email = $email;
+        $this->avatarUrl = $avatarUrl;
+        $this->profileHtmlUrl = $profileHtmlUrl;
+    }
 
-    /**
-     * @var \DateTime
-     * @Serializer\Expose
-     */
-    protected $lastLogin;
+    public function getUsername()
+    {
+        return $this->username;
+    }
 
-    /**
-     * User constructor.
-     */
-     public function __construct()
-     {
-         $this->enabled = false;
+    public function getFullname()
+    {
+        return $this->fullname;
+    }
 
-         if($this->roles === null)
-         {
-            $this->roles = ['ROLE_USER'];
-         }
-         else
-         {
-            $this->roles = array();
-         }
-     }
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    public function getAvatarUrl()
+    {
+        return $this->avatarUrl;
+    }
+
+    public function getProfileHtmlUrl()
+    {
+        return $this->profileHtmlUrl;
+    }
+
+    public function getRoles()
+    {
+        return ['ROLE_USER'];
+    }
+
+    public function getPassword()
+    {
+    }
+
+    public function getSalt()
+    {
+    }
+
+    public function eraseCredentials()
+    {
+    }
 }

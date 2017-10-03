@@ -4,11 +4,11 @@
 parameters:
     database_host: 127.0.0.1
     database_port: null
-    database_name: blogapifosrest
+    database_name: 
     database_user: root
     database_password: null
     mailer_transport: smtp
-    mailer_host: smtp.free.fr
-    mailer_user: aurelien.theriot@gmail.com
+    mailer_host: 
+    mailer_user: 
     mailer_password: null
-    secret: 6546hgez545gdfg4dfg56fd558gsd5sd5f6sd5f
+    secret: 

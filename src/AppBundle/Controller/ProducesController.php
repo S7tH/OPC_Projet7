@@ -21,7 +21,7 @@ use Hateoas\Representation\PaginatedRepresentation;
 
 
 /**
- * @Route("/api")
+ * @Route("/")
  */
 class ProducesController extends FOSRestController
 {
