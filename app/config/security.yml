@@ -4,10 +4,8 @@ security:
 
     # http://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
     providers:
-        in_memory:
-            memory: ~
-        #provider.facebook_user:
-        #    id: facebook_user_provider
+        provider.facebook_user:
+            id: facebook_user_provider
 
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
@@ -15,12 +13,12 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
-        #secured_area:
-        #    pattern: ^/
-        #    stateless: true
-        #    simple_preauth:
-        #        authenticator: facebook_authenticator
-        #    provider: provider.facebook_user
+        secured_area:
+            pattern: ^/
+            stateless: true
+            simple_preauth:
+                authenticator: facebook_authenticator
+            provider: provider.facebook_user
 
         main:
             anonymous: ~
