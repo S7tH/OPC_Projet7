@@ -12,9 +12,11 @@ use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\FOSRestController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
+use Nelmio\ApiDocBundle\Annotation as Doc;
+
 
 /**
- * @Route("/")
+ * @Route("/api")
  */
 class UserController extends FOSRestController
 {
@@ -25,6 +27,12 @@ class UserController extends FOSRestController
 	 * )
 	 *
 	 * @Rest\View
+	 *
+	 * @Doc\ApiDoc(
+	 *		section = "User",
+	 *		resource = true,
+	 *		description = "Get current user informations."
+	 * )
 	 */
 	 public function getUserCheckAction(User $user)//Request $request)
 	 {
@@ -40,6 +48,12 @@ class UserController extends FOSRestController
 	 * )
 	 *
 	 * @Rest\View
+	 *
+	 * @Doc\ApiDoc(
+	 *		section = "User",
+	 *		resource = true,
+	 *		description = "Get all users registered."
+	 * )
 	 */
 	public function getUsersAction()
 	{
@@ -55,9 +69,24 @@ class UserController extends FOSRestController
 	 * )
 	 *
 	 * @Rest\View
+	 *
+	 * @Doc\ApiDoc(
+	 * 		section = "User",
+	 * 		resource = true,
+	 *		description = "Get one user.",
+	 *		requirements={
+	 * 			{
+	 *				"name"="id",
+	 *				"dataType"="integer",
+	 *				"requirement"="\d+",
+	 *				"description"="The user unique identifier."
+	 * 			}
+	 *		}
+	 * )
 	 */
 	public function getUserAction(User $user)
 	{
 		return $user;
 	}
+
 }

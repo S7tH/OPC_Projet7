@@ -16,7 +16,8 @@ class FacebookAuthenticator implements SimplePreAuthenticatorInterface, Authenti
     public function createToken(Request $request, $providerKey)
     {
         $bearer = $request->headers->get('Authorization');
-        $accessToken = substr($bearer, 7);
+        //we want just the access_token code we wut this part <Bearer"> with substr
+        $accessToken = substr($bearer,7);
 
         return new PreAuthenticatedToken(
             'anon.',
@@ -28,7 +29,7 @@ class FacebookAuthenticator implements SimplePreAuthenticatorInterface, Authenti
     public function authenticateToken(TokenInterface $token, UserProviderInterface $userProvider, $providerKey)
     {
         $accessToken = $token->getCredentials();
-
+   
         $user = $userProvider->loadUserByUsername($accessToken);
 
         return new PreAuthenticatedToken(

@@ -19,9 +19,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 use Hateoas\Representation\PaginatedRepresentation;
 
+use Nelmio\ApiDocBundle\Annotation as Doc;
+
 
 /**
- * @Route("/")
+ * @Route("/api")
  */
 class ProducesController extends FOSRestController
 {
@@ -52,6 +54,12 @@ class ProducesController extends FOSRestController
      *     description="The pagination offset"
      * )
      * @Rest\View()
+     *
+     * @Doc\ApiDoc(
+	 *		section="Produces",
+	 * 		resource=true,
+	 *		description="Get the list of all productes."
+	 * )
      */
      public function listAction(ParamFetcherInterface $paramFetcher)
      {
@@ -65,6 +73,7 @@ class ProducesController extends FOSRestController
          return new ProducesRepresentation($pager);
      }
 
+    
     /**
      * @Rest\Get(
      *     path = "/produces/{id}",
@@ -72,6 +81,20 @@ class ProducesController extends FOSRestController
      *     requirements = {"id"="\d+"}
      * )
      * @Rest\View
+     *
+     * @Doc\ApiDoc(
+	 *		section="Produces",
+	 *		resource=true,
+	 *		description="Get one produce.",
+	 *		requirements={
+	 * 			{
+	 *				"name"="id",
+	 *				"dataType"="integer",
+	 *				"requirement"="\d+",
+	 *				"description"="The produce unique identifier."
+	 * 			}
+	 *		}
+	 * )
      */
      public function showAction(Produces $produces)
      {

@@ -106,3 +106,5 @@ csa_guzzle:
         facebook_api:
             config:
                 base_url: https://graph.facebook.com
+
+nelmio_api_doc: ~

@@ -32,7 +32,8 @@
         "white-october/pagerfanta-bundle": "^1.0",
         "willdurand/hateoas-bundle": "^1.2",
         "csa/guzzle-bundle": "^2.2",
-        "jms/serializer-bundle": "^2.1"
+        "jms/serializer-bundle": "^2.1",
+        "nelmio/api-doc-bundle": "^2.13"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",
