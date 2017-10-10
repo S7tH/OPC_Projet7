@@ -32,7 +32,7 @@ class User implements UserInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="username", type="string", length=255, unique=true)
+     * @ORM\Column(name="username", type="string", length=255, unique=true, nullable=true)
      *
      * @Expose
      */
@@ -41,7 +41,7 @@ class User implements UserInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="facebook_id", type="string", length=255, unique=true)
+     * @ORM\Column(name="facebook_id", type="string", length=255, unique=true, nullable=true)
      *
      * @Expose
      */
@@ -59,7 +59,7 @@ class User implements UserInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="gender", type="string", length=255)
+     * @ORM\Column(name="gender", type="string", length=255, nullable=true)
      *
      * @Expose
      */
