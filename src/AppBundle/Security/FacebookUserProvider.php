@@ -41,21 +41,25 @@ class FacebookUserProvider implements UserProviderInterface
         //check if this user exist in bilemo database
         $checkUser = $this->em->getRepository('AppBundle:User')->findOneByEmail($user->getEmail());
 
-        //if it doesn't exist, we save it befor return the user 
+        //if exist user has the rights
         if($checkUser)
         {
-            return $user;
+            $user->setRoles(['ROLE_USER']);
         }
-        else
+    
+        //if the current datas are differents we update them
+        if($checkUser != $user)
         {
+            $checkUser->setUsername($user->getUsername());
+            $checkUser->setFacebook_id($user->getFaceBook_id());
+            $checkUser->setGender($user->getGender());
             $save = $this->em;
-            $save->persist($user);
+            $save->persist($checkUser);
             $save->flush();
-
-            return $user;
         }
+
+        return $user;
        
-        //return new User($userData['name'], $userData['id'], $userData['email'], $userData['gender']);
     }
 
     public function refreshUser(UserInterface $user)

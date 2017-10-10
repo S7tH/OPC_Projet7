@@ -3,8 +3,7 @@
 namespace AppBundle\Entity;
 
 use Symfony\Component\Security\Core\User\UserInterface;
-use JMS\Serializer\Annotation\ExclusionPolicy;
-use JMS\Serializer\Annotation\Expose;
+use JMS\Serializer\Annotation as Serializer;
 use Doctrine\ORM\Mapping as ORM;
 use Hateoas\Configuration\Annotation as Hateoas;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -15,7 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="`user`")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  *
- * @ExclusionPolicy("all")
+ * @Serializer\ExclusionPolicy("ALL")
  *
  */
 class User implements UserInterface
@@ -26,6 +25,8 @@ class User implements UserInterface
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Serializer\Expose
+     * @Serializer\Since("1.0")
      */
      private $id;
 
@@ -34,7 +35,8 @@ class User implements UserInterface
      *
      * @ORM\Column(name="username", type="string", length=255, unique=true, nullable=true)
      *
-     * @Expose
+     * @Serializer\Expose
+     * @Serializer\Since("1.0")
      */
     private $username;
     
@@ -43,7 +45,8 @@ class User implements UserInterface
      *
      * @ORM\Column(name="facebook_id", type="string", length=255, unique=true, nullable=true)
      *
-     * @Expose
+     * @Serializer\Expose
+     * @Serializer\Since("1.0")
      */
     private $facebook_id;
 
@@ -52,7 +55,8 @@ class User implements UserInterface
      *
      * @ORM\Column(name="email", type="string", length=255, unique=true)
      *
-     * @Expose
+     * @Serializer\Expose
+     * @Serializer\Since("1.0")
      */
     private $email;
 
@@ -61,9 +65,15 @@ class User implements UserInterface
      *
      * @ORM\Column(name="gender", type="string", length=255, nullable=true)
      *
-     * @Expose
+     * @Serializer\Expose
+     * @Serializer\Since("1.0")
      */
     private $gender;
+
+    /**
+     * @ORM\Column(name="roles", type="array")
+     */
+    private $roles = array();
 
     public function __construct($username, $facebook_id, $email, $gender)
     {
@@ -83,15 +93,43 @@ class User implements UserInterface
      return $this->id;
     }
 
-    public function getUserName()
+    public function getUsername()
     {
         return $this->username;
     }
+
+    /**
+     * Set username
+     *
+     * @param string $username
+     *
+     * @return User
+     */
+     public function setUsername($username)
+     {
+         $this->username = $username;
+ 
+         return $this;
+     }
 
     public function getFacebook_id()
     {
         return $this->facebook_id;
     }
+
+    /**
+     * Set facebook_id
+     *
+     * @param string $facebook_id
+     *
+     * @return User
+     */
+     public function setFacebook_id($facebook_id)
+     {
+         $this->facebook_id = $facebook_id;
+ 
+         return $this;
+     }
 
     public function getEmail()
     {
@@ -103,15 +141,39 @@ class User implements UserInterface
         return $this->gender;
     }
 
-    public function getCover()
-    {
-        return $this->cover;
-    }
+    /**
+     * Set gender
+     *
+     * @param string $gender
+     *
+     * @return User
+     */
+     public function setGender($gender)
+     {
+         $this->gender = $gender;
+ 
+         return $this;
+     }
+
 
     public function getRoles()
     {
-        return ['ROLE_USER'];
+        return $this->roles;
     }
+
+     /**
+     * Set roles
+     *
+     * @param array $roles
+     *
+     * @return User
+     */
+     public function setRoles($roles)
+     {
+         $this->roles = $roles;
+ 
+         return $this;
+     }
 
     public function getPassword()
     {
@@ -124,4 +186,43 @@ class User implements UserInterface
     public function eraseCredentials()
     {
     }
+
+    /**
+     * Set facebookId
+     *
+     * @param string $facebookId
+     *
+     * @return User
+     */
+    public function setFacebookId($facebookId)
+    {
+        $this->facebook_id = $facebookId;
+
+        return $this;
+    }
+
+    /**
+     * Get facebookId
+     *
+     * @return string
+     */
+    public function getFacebookId()
+    {
+        return $this->facebook_id;
+    }
+
+    /**
+     * Set email
+     *
+     * @param string $email
+     *
+     * @return User
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
 }

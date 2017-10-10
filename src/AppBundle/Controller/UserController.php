@@ -20,26 +20,6 @@ use Nelmio\ApiDocBundle\Annotation as Doc;
  */
 class UserController extends FOSRestController
 {
-	/**
-	 * @Rest\Get(
-	 *		path = "/user-check/{username}",
-	 *		name = "get_user_check"
-	 * )
-	 *
-	 * @Rest\View
-	 *
-	 * @Doc\ApiDoc(
-	 *		section = "User",
-	 *		resource = true,
-	 *		description = "Get current user informations."
-	 * )
-	 */
-	 public function getUserCheckAction(User $user)//Request $request)
-	 {
-		//$users = $this->getDoctrine()->getManager()->getRepository('AppBundle:User')->findAll();
-		
-		 return $user;
-	 }
 
 	/**
 	 * @Rest\Get(

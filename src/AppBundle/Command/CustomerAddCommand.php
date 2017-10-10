@@ -22,7 +22,7 @@ class CustomerAddCommand extends ContainerAwareCommand
                 InputOption::VALUE_REQUIRED,
                 'Sets facebook email.',
                 null
-            )
+            )            
             ->setHelp(
                 <<<EOT
                     The <info>%command.name%</info> command creates a new Bilemo customer with a facebook email.
@@ -48,6 +48,7 @@ EOT
 
         //create a user instance to save the customer
         $customer = new User(null, null, $email, null);
+        $customer->setRoles(['ROLE_USER']);
 
         $em->persist($customer);
         $em->flush();

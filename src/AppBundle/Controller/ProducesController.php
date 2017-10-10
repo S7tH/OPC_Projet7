@@ -63,6 +63,7 @@ class ProducesController extends FOSRestController
      */
      public function listAction(ParamFetcherInterface $paramFetcher)
      {
+
          $pager = $this->getDoctrine()->getRepository('AppBundle:Produces')->search(
              $paramFetcher->get('keyword'),
              $paramFetcher->get('order'),
