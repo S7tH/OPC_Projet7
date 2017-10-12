@@ -72,6 +72,8 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(name="roles", type="array")
+     * @Serializer\Expose
+     * @Serializer\Since("2.0")
      */
     private $roles = array();
 

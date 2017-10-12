@@ -22,14 +22,23 @@ class CustomerAddCommand extends ContainerAwareCommand
                 InputOption::VALUE_REQUIRED,
                 'Sets facebook email.',
                 null
-            )            
+            )
+            ->addOption(
+                'super_admin',
+                null,
+                InputOption::VALUE_NONE,
+                'Sets admin role.',
+                null
+            )                        
             ->setHelp(
                 <<<EOT
                     The <info>%command.name%</info> command creates a new Bilemo customer with a facebook email.
                     php bin/console customer:add --email=customer.mail@customerfacebookadress.com.
+                    To create an admin : 
+                    php bin/console customer:add --email=customer.mail@customerfacebookadress.com. --super_admin
                     
  
-<info>php %command.full_name% [--email=...] name</info>
+<info>php %command.full_name% [--email=...] [--super_admin] name</info>
  
 EOT
             );
@@ -48,7 +57,15 @@ EOT
 
         //create a user instance to save the customer
         $customer = new User(null, null, $email, null);
-        $customer->setRoles(['ROLE_USER']);
+
+        if($input->getOption('super_admin'))
+        {
+            $customer->setRoles(['ROLE_ADMIN']);
+        }
+        else
+        {
+            $customer->setRoles(['ROLE_USER']);
+        }
 
         $em->persist($customer);
         $em->flush();

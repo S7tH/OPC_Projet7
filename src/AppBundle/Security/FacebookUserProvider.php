@@ -44,7 +44,14 @@ class FacebookUserProvider implements UserProviderInterface
         //if exist user has the rights
         if($checkUser)
         {
-            $user->setRoles(['ROLE_USER']);
+            if($checkUser->getRoles() !== ['ROLE_USER'])
+            {
+                $user->setRoles(['ROLE_ADMIN']);
+            }
+            else
+            {
+                $user->setRoles(['ROLE_USER']);
+            }    
         }
     
         //if the current datas are differents we update them
