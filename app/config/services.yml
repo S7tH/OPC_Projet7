@@ -17,6 +17,6 @@ services:
         tags:
             - { name: app.normalizer }
     
-    bilemo_authenticator:
-        class: AppBundle\Security\BilemoAuthenticator
+    #bilemo_authenticator:
+    #    class: AppBundle\Security\BilemoAuthenticator
     

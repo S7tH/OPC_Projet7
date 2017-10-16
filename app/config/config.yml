@@ -91,11 +91,8 @@ fos_rest:
         validation_errors_argument: violations
     format_listener:
         rules:
-            - { path: '^/oauth/v2/auth', priorities: ['html'], fallback_format: 'html', prefer_extension: false }
-            - { path: '^/login$', priorities: ['html'], fallback_format: 'html', prefer_extension: false }
-            - { path: '^/register', priorities: ['html'], fallback_format: 'html', prefer_extension: false }
-            - { path: '^/', priorities: ['html'], fallback_format: 'html', prefer_extension: false }
-            - { path: '^/api', priorities: ['json'], fallback_format: 'json' }
+            #- { path: '^/', priorities: ['html'], fallback_format: 'html', prefer_extension: false }
+            - { path: '^/', priorities: ['json'], fallback_format: 'json' }
     param_fetcher_listener: force
     exception:
         enabled: true
@@ -104,28 +101,3 @@ fos_rest:
         messages:
            { AppBundle\Exception\ResourceValidationException: true }
 
-jms_serializer:
-    metadata:
-        directories:
-            FOSUB:
-                namespace_prefix: FOS\UserBundle
-                path: "%kernel.root_dir%/../var/serializer/FOSUB"
-
-fos_user:
-    db_driver: orm #type of data base that we use, here ORM doctrine
-    firewall_name: main
-    user_class: AppBundle\Entity\User #our entity user
-    from_email:
-        address: "%mailer_user%"
-        sender_name: "%mailer_user%"
-
-fos_oauth_server:
-    db_driver: orm       # Drivers available: orm, mongodb, or propel
-    client_class:        AppBundle\Entity\Client
-    access_token_class:  AppBundle\Entity\AccessToken
-    refresh_token_class: AppBundle\Entity\RefreshToken
-    auth_code_class:     AppBundle\Entity\AuthCode
-    service :
-        user_provider : fos_user.user_provider.username
-        options:
-            supported_scopes: user
