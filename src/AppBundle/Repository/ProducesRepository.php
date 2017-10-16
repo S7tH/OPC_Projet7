@@ -4,7 +4,7 @@ namespace AppBundle\Repository;
 
 class ProducesRepository extends AbstractRepository
 {
-    public function search($term, $order = 'asc', $limit = 20, $offset = 0)
+    public function search($order = 'asc', $limit = 20, $offset = 0, $term)
     {
         $qb = $this
             ->createQueryBuilder('p')

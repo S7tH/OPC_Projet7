@@ -22,6 +22,10 @@ use Hateoas\Representation\PaginatedRepresentation;
 
 use Nelmio\ApiDocBundle\Annotation as Doc;
 
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+
+
+
 
 /**
  * @Route("/api")
@@ -34,12 +38,6 @@ class UserController extends FOSRestController
 	 *		path = "/user",
 	 *		name = "app_user_list"
 	 * )
-	 * @Rest\QueryParam(
-     *     name="keyword",
-     *     requirements="[a-zA-Z0-9]",
-     *     nullable=true,
-     *     description="The keyword to search for."
-     * )
      * @Rest\QueryParam(
      *     name="order",
      *     requirements="asc|desc",
@@ -58,6 +56,11 @@ class UserController extends FOSRestController
      *     default="0",
      *     description="The pagination offset"
      * )
+     * @Rest\QueryParam(
+     *     name="keyword",
+     *     nullable=true,
+     *     description="The keyword to search for."
+     * )
 	 * @Rest\View
 	 *
 	 * @Doc\ApiDoc(
@@ -70,10 +73,10 @@ class UserController extends FOSRestController
 	{
 
 		$pager = $this->getDoctrine()->getRepository('AppBundle:User')->search(
-			$paramFetcher->get('keyword'),
 			$paramFetcher->get('order'),
 			$paramFetcher->get('limit'),
-			$paramFetcher->get('offset')
+            $paramFetcher->get('offset'),
+            $paramFetcher->get('keyword')
 		);
 
 		return new UserRepresentation($pager);
@@ -117,21 +120,28 @@ class UserController extends FOSRestController
      */
      public function createUserAction(User $user, ConstraintViolationList $violations)
      {
-         if (count($violations)) {
-             $message = 'The JSON sent contains invalid data. Here are the errors you need to correct: ';
-             foreach ($violations as $violation) {
-                 $message .= sprintf("Field %s: %s ", $violation->getPropertyPath(), $violation->getMessage());
-             }
- 
-             throw new ResourceValidationException($message);
-         }
- 
-         $em = $this->getDoctrine()->getManager();
- 
-         $em->persist($user);
-         $em->flush();
- 
-         return $user;
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN'))
+        {
+            if (count($violations)) {
+                $message = 'The JSON sent contains invalid data. Here are the errors you need to correct: ';
+                foreach ($violations as $violation) {
+                    $message .= sprintf("Field %s: %s ", $violation->getPropertyPath(), $violation->getMessage());
+                }
+    
+                throw new ResourceValidationException($message);
+            }
+    
+            $em = $this->getDoctrine()->getManager();
+    
+            $em->persist($user);
+            $em->flush();
+    
+            return $user;
+        }
+        else
+        {
+            throw new AccessDeniedException('Only an administrator can validate the registration.');
+        }
      }
 
     /**
@@ -143,7 +153,7 @@ class UserController extends FOSRestController
      * )
      * @ParamConverter("newUser", converter="fos_rest.request_body")
      */
-     public function updateAction(User $user, User $newUser, ConstraintViolationList $violations)
+     public function updateUserAction(User $user, User $newUser, ConstraintViolationList $violations)
      {
          if (count($violations)) {
              $message = 'The JSON sent contains invalid data. Here are the errors you need to correct: ';
@@ -170,7 +180,7 @@ class UserController extends FOSRestController
      *     requirements = {"id"="\d+"}
      * )
      */
-    public function deleteAction(User $user)
+    public function deleteUserAction(User $user)
     {
         $this->getDoctrine()->getManager()->remove($user)->flush();
 

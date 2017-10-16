@@ -52,20 +52,26 @@ class FacebookUserProvider implements UserProviderInterface
             {
                 $user->setRoles(['ROLE_USER']);
             }    
-        }
+        
     
-        //if the current datas are differents we update them
-        if($checkUser != $user)
-        {
-            $checkUser->setUsername($user->getUsername());
-            $checkUser->setFacebook_id($user->getFaceBook_id());
-            $checkUser->setGender($user->getGender());
-            $save = $this->em;
-            $save->persist($checkUser);
-            $save->flush();
+            //if the current datas are differents we update them
+            if($checkUser != $user)
+            {
+                $checkUser->setUsername($user->getUsername());
+                $checkUser->setFacebook_id($user->getFaceBook_id());
+                $checkUser->setGender($user->getGender());
+                $save = $this->em;
+                $save->persist($checkUser);
+                $save->flush();
+            }
+            return $user;
         }
-
-        return $user;
+        else
+        {
+            $user->setRoles(['ROLE_UNREGISTERED']);
+            
+            return $user;
+        }
        
     }
 

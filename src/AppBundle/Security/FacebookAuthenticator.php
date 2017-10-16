@@ -37,7 +37,7 @@ class FacebookAuthenticator implements SimplePreAuthenticatorInterface, Authenti
             $user,
             $accessToken,
             $providerKey,
-            ['ROLE_USER']
+            $user->getRoles()
         );
     }
 

@@ -21,6 +21,8 @@ use Hateoas\Representation\PaginatedRepresentation;
 
 use Nelmio\ApiDocBundle\Annotation as Doc;
 
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+
 
 /**
  * @Route("/api")
@@ -29,12 +31,6 @@ class ProducesController extends FOSRestController
 {
     /**
      * @Rest\Get("/produces", name="app_produces_list")
-     * @Rest\QueryParam(
-     *     name="keyword",
-     *     requirements="[a-zA-Z0-9]",
-     *     nullable=true,
-     *     description="The keyword to search for."
-     * )
      * @Rest\QueryParam(
      *     name="order",
      *     requirements="asc|desc",
@@ -53,6 +49,11 @@ class ProducesController extends FOSRestController
      *     default="0",
      *     description="The pagination offset"
      * )
+     * @Rest\QueryParam(
+     *     name="keyword",
+     *     nullable=true,
+     *     description="The keyword to search for."
+     * )
      * @Rest\View()
      *
      * @Doc\ApiDoc(
@@ -63,15 +64,22 @@ class ProducesController extends FOSRestController
      */
      public function listAction(ParamFetcherInterface $paramFetcher)
      {
-
-         $pager = $this->getDoctrine()->getRepository('AppBundle:Produces')->search(
-             $paramFetcher->get('keyword'),
-             $paramFetcher->get('order'),
-             $paramFetcher->get('limit'),
-             $paramFetcher->get('offset')
-         );
- 
-         return new ProducesRepresentation($pager);
+        if($this->get('security.authorization_checker')->isGranted('ROLE_USER'))
+        {
+            $pager = $this->getDoctrine()->getRepository('AppBundle:Produces')->search(
+                $paramFetcher->get('order'),
+                $paramFetcher->get('limit'),
+                $paramFetcher->get('offset'),
+                $paramFetcher->get('keyword')
+        );
+    
+            return new ProducesRepresentation($pager);
+        }
+        else
+        { 
+            throw new AccessDeniedException('You must be registered as a Bilemo customer to access the content. Please contact bilemo if you want to become a customer');
+        }
+        
      }
 
     

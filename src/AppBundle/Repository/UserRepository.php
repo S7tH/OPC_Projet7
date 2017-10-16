@@ -5,7 +5,7 @@ namespace AppBundle\Repository;
 class UserRepository  extends AbstractRepository
 {
 
-    public function search($term, $order = 'asc', $limit = 20, $offset = 0)
+    public function search($order = 'asc', $limit = 20, $offset = 0, $term)
     {
         $qb = $this
             ->createQueryBuilder('u')
@@ -15,7 +15,7 @@ class UserRepository  extends AbstractRepository
 
         if ($term) {
             $qb
-                ->where('u.title LIKE ?1')
+                ->where('u.username LIKE ?1')
                 ->setParameter(1, '%'.$term.'%')
             ;
         }

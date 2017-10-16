@@ -67,7 +67,7 @@ class Produces
     /**
      * @var string
      *
-     * @ORM\Column(name="content", type="text", length=255)
+     * @ORM\Column(name="content", type="text")
      *
      * @Serializer\Expose
      * @Serializer\Since("1.0")
