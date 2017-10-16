@@ -2,49 +2,84 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\User;
-
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+
+use AppBundle\Entity\User;
+use AppBundle\Exception\ResourceValidationException;
+use AppBundle\Representation\UserRepresentation;
+
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcherInterface;
-use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\FOSRestController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Validator\ConstraintViolationList;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+
+use Hateoas\Representation\PaginatedRepresentation;
+
+use Nelmio\ApiDocBundle\Annotation as Doc;
+
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+
+
 
 
 /**
- * @Route("/")
+ * @Route("/api")
  */
 class UserController extends FOSRestController
 {
-	/**
-	 * @Rest\Get(
-	 *		path = "/user-check/{username}",
-	 *		name = "get_user_check"
-	 * )
-	 *
-	 * @Rest\View
-	 */
-	 public function getUserCheckAction(User $user)//Request $request)
-	 {
-		//$users = $this->getDoctrine()->getManager()->getRepository('AppBundle:User')->findAll();
-		
-		 return $user;
-	 }
 
 	/**
 	 * @Rest\Get(
 	 *		path = "/user",
 	 *		name = "app_user_list"
 	 * )
-	 *
+     * @Rest\QueryParam(
+     *     name="order",
+     *     requirements="asc|desc",
+     *     default="asc",
+     *     description="Sort order (asc or desc)"
+     * )
+     * @Rest\QueryParam(
+     *     name="limit",
+     *     requirements="\d+",
+     *     default="15",
+     *     description="Max number of movies per page."
+     * )
+     * @Rest\QueryParam(
+     *     name="offset",
+     *     requirements="\d+",
+     *     default="0",
+     *     description="The pagination offset"
+     * )
+     * @Rest\QueryParam(
+     *     name="keyword",
+     *     nullable=true,
+     *     description="The keyword to search for."
+     * )
 	 * @Rest\View
+	 *
+	 * @Doc\ApiDoc(
+	 *		section = "User",
+	 *		resource = true,
+	 *		description = "Get all users registered."
+	 * )
 	 */
-	public function getUsersAction()
+	public function getUsersAction(ParamFetcherInterface $paramFetcher)
 	{
-		$users = $this->getDoctrine()->getManager()->getRepository('AppBundle:User')->findAll();
-		return $users;
+
+		$pager = $this->getDoctrine()->getRepository('AppBundle:User')->search(
+			$paramFetcher->get('order'),
+			$paramFetcher->get('limit'),
+            $paramFetcher->get('offset'),
+            $paramFetcher->get('keyword')
+		);
+
+		return new UserRepresentation($pager);
 	}
 
 	/**
@@ -55,9 +90,101 @@ class UserController extends FOSRestController
 	 * )
 	 *
 	 * @Rest\View
+	 *
+	 * @Doc\ApiDoc(
+	 * 		section = "User",
+	 * 		resource = true,
+	 *		description = "Get one user.",
+	 *		requirements={
+	 * 			{
+	 *				"name"="id",
+	 *				"dataType"="integer",
+	 *				"requirement"="\d+",
+	 *				"description"="The user unique identifier."
+	 * 			}
+	 *		}
+	 * )
 	 */
 	public function getUserAction(User $user)
 	{
 		return $user;
 	}
+
+	/**
+     * @Rest\Post(
+     *    path = "/user",
+     *    name = "app_user_create"
+     * )
+     * @Rest\View(StatusCode = 201)
+     * @ParamConverter("user", converter="fos_rest.request_body")
+     */
+     public function createUserAction(User $user, ConstraintViolationList $violations)
+     {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN'))
+        {
+            if (count($violations)) {
+                $message = 'The JSON sent contains invalid data. Here are the errors you need to correct: ';
+                foreach ($violations as $violation) {
+                    $message .= sprintf("Field %s: %s ", $violation->getPropertyPath(), $violation->getMessage());
+                }
+    
+                throw new ResourceValidationException($message);
+            }
+    
+            $em = $this->getDoctrine()->getManager();
+    
+            $em->persist($user);
+            $em->flush();
+    
+            return $user;
+        }
+        else
+        {
+            throw new AccessDeniedException('Only an administrator can validate the registration.');
+        }
+     }
+
+    /**
+     * @Rest\View(StatusCode = 200)
+     * @Rest\Put(
+     *     path = "/user/{id}",
+     *     name = "app_user_update",
+     *     requirements = {"id"="\d+"}
+     * )
+     * @ParamConverter("newUser", converter="fos_rest.request_body")
+     */
+     public function updateUserAction(User $user, User $newUser, ConstraintViolationList $violations)
+     {
+         if (count($violations)) {
+             $message = 'The JSON sent contains invalid data. Here are the errors you need to correct: ';
+             foreach ($violations as $violation) {
+                 $message .= sprintf("Field %s: %s ", $violation->getPropertyPath(), $violation->getMessage());
+             }
+ 
+             throw new ResourceValidationException($message);
+         }
+ 
+         $user->setTitle($newUser->getTitle());
+         $user->setContent($newUser->getContent());
+ 
+         $this->getDoctrine()->getManager()->flush();
+ 
+         return $user;
+     }
+
+    /**
+     * @Rest\View(StatusCode = 204)
+     * @Rest\Delete(
+     *     path = "/user/{id}",
+     *     name = "app_user_delete",
+     *     requirements = {"id"="\d+"}
+     * )
+     */
+    public function deleteUserAction(User $user)
+    {
+        $this->getDoctrine()->getManager()->remove($user)->flush();
+
+        return;
+    }
+
 }

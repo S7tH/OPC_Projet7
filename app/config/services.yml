@@ -17,6 +17,11 @@ services:
         tags:
             - { name: app.normalizer }
     
-    #bilemo_authenticator:
-    #    class: AppBundle\Security\BilemoAuthenticator
+    facebook_authenticator:
+        class: AppBundle\Security\FacebookAuthenticator
+    
+    facebook_user_provider:
+        class: AppBundle\Security\FacebookUserProvider
+        arguments: ["@csa_guzzle.client.facebook_api", "@jms_serializer", "@doctrine.orm.default_entity_manager"]
+
     

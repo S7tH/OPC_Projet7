@@ -2,25 +2,31 @@
 # http://symfony.com/doc/current/security.html
 security:
 
+    role_hierarchy:
+        ROLE_ADMIN: [ROLE_USER]
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+
     # http://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
     providers:
-        in_memory:
-            memory: ~
-        #provider.facebook_user:
-        #    id: facebook_user_provider
+        provider.facebook_user:
+            id: facebook_user_provider
 
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+        
+        api_doc:
+            pattern: ^/api/doc
+            security: false
 
-        #secured_area:
-        #    pattern: ^/
-        #    stateless: true
-        #    simple_preauth:
-        #        authenticator: facebook_authenticator
-        #    provider: provider.facebook_user
+        secured_area:
+            pattern: ^/
+            stateless: true
+            simple_preauth:
+                authenticator: facebook_authenticator
+            provider: provider.facebook_user
 
         main:
             anonymous: ~
@@ -31,3 +37,7 @@ security:
 
             # form_login: ~
             # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
+        
+    access_control:
+        - { path: ^/api/produces, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api, roles: ROLE_USER }        

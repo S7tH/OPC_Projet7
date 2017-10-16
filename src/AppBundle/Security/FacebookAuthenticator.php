@@ -11,14 +11,16 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
 use Symfony\Component\Security\Http\Authentication\SimplePreAuthenticatorInterface;
 
-class BilemoAuthenticator implements SimplePreAuthenticatorInterface, AuthenticationFailureHandlerInterface
+class FacebookAuthenticator implements SimplePreAuthenticatorInterface, AuthenticationFailureHandlerInterface
 {
     public function createToken(Request $request, $providerKey)
     {
         $bearer = $request->headers->get('Authorization');
-        $accessToken = substr($bearer, 7);
+        //we want just the access_token code we wut this part <Bearer"> with substr
+        $accessToken = substr($bearer,7);
 
-        return new PreAuthenticatedToken(
+        return new PreAuthenticatedToken
+        (
             'anon.',
             $accessToken,
             $providerKey
@@ -28,14 +30,14 @@ class BilemoAuthenticator implements SimplePreAuthenticatorInterface, Authentica
     public function authenticateToken(TokenInterface $token, UserProviderInterface $userProvider, $providerKey)
     {
         $accessToken = $token->getCredentials();
-
+   
         $user = $userProvider->loadUserByUsername($accessToken);
 
         return new PreAuthenticatedToken(
             $user,
             $accessToken,
             $providerKey,
-            ['ROLE_USER']
+            $user->getRoles()
         );
     }
 
