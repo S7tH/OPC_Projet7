@@ -4,7 +4,6 @@ namespace AppBundle\Repository;
 
 class UserRepository  extends AbstractRepository
 {
-
     public function search($order = 'asc', $limit = 20, $offset = 0, $term)
     {
         $qb = $this
