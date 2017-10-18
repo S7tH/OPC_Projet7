@@ -28,11 +28,12 @@ class ExceptionListener implements EventSubscriberInterface
 
     public function processException(GetResponseForExceptionEvent $event)
     {
-        foreach ($this->normalizers as $normalizer) {
+        foreach ($this->normalizers as $normalizer)
+        {
             $result = $normalizer->normalize($event->getException());
         }
 
-        if (null == $result) {
+        if (null === $result) {
 
             $result['code'] = Response::HTTP_BAD_REQUEST;
 

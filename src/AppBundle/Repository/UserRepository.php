@@ -22,3 +22,4 @@ class UserRepository  extends AbstractRepository
         return $this->paginate($qb, $limit, $offset);
     }
 }
+

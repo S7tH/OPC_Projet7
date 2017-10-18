@@ -23,5 +23,3 @@ services:
     facebook_user_provider:
         class: AppBundle\Security\FacebookUserProvider
         arguments: ["@csa_guzzle.client.facebook_api", "@jms_serializer", "@doctrine.orm.default_entity_manager"]
-
-    

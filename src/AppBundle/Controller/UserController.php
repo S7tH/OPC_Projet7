@@ -191,7 +191,7 @@ class UserController extends FOSRestController
 	 *				"name"="id",
 	 *				"dataType"="integer",
 	 *				"requirement"="\d+",
-	 *				"description"="The user unique identifier."
+	 *				"description"="The user unique identifier. Show how to create a user to know the keys what you can change"
      * 			}
 	 *		},
      *      statusCodes={
