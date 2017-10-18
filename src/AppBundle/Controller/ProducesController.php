@@ -187,7 +187,7 @@ class ProducesController extends FOSRestController
 	 *				"name"="id",
 	 *				"dataType"="integer",
 	 *				"requirement"="\d+",
-	 *				"description"="The produce unique identifier."
+	 *				"description"="The produce unique identifier.  Show how to create a produce to know the keys what you can change"
      * 			}
 	 *		},
      *      statusCodes={
