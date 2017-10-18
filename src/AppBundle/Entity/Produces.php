@@ -23,13 +23,18 @@ use Symfony\Component\Validator\Constraints as Assert;
  * absolute = true
  * ))
  *
+ * @Hateoas\Relation("create",
+ * href = @Hateoas\Route("app_produces_create",
+ * absolute = true
+ * ))
+ *
  * @Hateoas\Relation("modify",
  * href = @Hateoas\Route("app_produces_update",
  * parameters = { "id" = "expr(object.getId())" },
  * absolute = true
  * ))
  *
-* @Hateoas\Relation("delete",
+ * @Hateoas\Relation("delete",
  * href = @Hateoas\Route("app_produces_delete",
  * parameters = { "id" = "expr(object.getId())" },
  * absolute = true
@@ -82,7 +87,7 @@ class Produces
     * @ORM\Column(name="shortdescription", type="text", length=255, nullable=true)
     *
     * @Serializer\Expose
-    * @Serializer\Since("2.0")
+    * @Serializer\Since("1.0")
     */
     private $shortDescription;
 

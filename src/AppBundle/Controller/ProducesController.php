@@ -52,14 +52,20 @@ class ProducesController extends FOSRestController
      * @Rest\QueryParam(
      *     name="keyword",
      *     nullable=true,
+     *     requirements="[a-zA-Z0-9]+",
      *     description="The keyword to search for."
      * )
-     * @Rest\View()
+     * @Rest\View(StatusCode = 200)
      *
      * @Doc\ApiDoc(
 	 *		section="Produces",
 	 * 		resource=true,
-	 *		description="Get the list of all productes."
+     *		description="Get the list of all produces.",
+     *      statusCodes={
+     *         200="Returned when request is successful",
+     *         401="Returned when the produce is not authorized",
+     *         404="Returned when request content is not found"
+     *     }
 	 * )
      */
      public function listAction(ParamFetcherInterface $paramFetcher)
@@ -89,7 +95,7 @@ class ProducesController extends FOSRestController
      *     name = "app_produces_show",
      *     requirements = {"id"="\d+"}
      * )
-     * @Rest\View
+     * @Rest\View(StatusCode = 200)
      *
      * @Doc\ApiDoc(
 	 *		section="Produces",
@@ -102,7 +108,12 @@ class ProducesController extends FOSRestController
 	 *				"requirement"="\d+",
 	 *				"description"="The produce unique identifier."
 	 * 			}
-	 *		}
+	 *		},
+     *      statusCodes={
+     *         200="Returned when request is successful",
+     *         401="Returned when the produce is not authorized",
+     *         404="Returned when request content is not found"
+     *     }
 	 * )
      */
      public function showAction(Produces $produces)
@@ -117,6 +128,25 @@ class ProducesController extends FOSRestController
      * )
      * @Rest\View(StatusCode = 201)
      * @ParamConverter("produces", converter="fos_rest.request_body")
+     *
+     * @Doc\ApiDoc(
+	 *		section="Produces",
+	 *		resource=true,
+	 *		description="Add a new produce.",
+	 *		requirements={
+	 * 			{
+	 *				"name"="array",
+	 *				"dataType"="Json",
+	 *				"requirement"="\d+",
+	 *				"description"="To create a new produce, make an array with these datas: 'title' = 'your title', 'content' = 'its fulltext', 'short_description' = 'its short description'"
+     * 			}
+	 *		},
+     *      statusCodes={
+     *         201="Returned when created",
+     *         401="Returned when the produce is not authorized",
+     *         404="Returned when request content is not found"
+     *     }
+	 * )
      */
      public function createAction(Produces $produces, ConstraintViolationList $violations)
      {
@@ -140,13 +170,32 @@ class ProducesController extends FOSRestController
      }
 
     /**
-     * @Rest\View(StatusCode = 200)
+     * @Rest\View(StatusCode = 201)
      * @Rest\Put(
      *     path = "/produces/{id}",
      *     name = "app_produces_update",
      *     requirements = {"id"="\d+"}
      * )
      * @ParamConverter("newProduces", converter="fos_rest.request_body")
+     *
+     * @Doc\ApiDoc(
+	 *		section="Produces",
+	 *		resource=true,
+	 *		description="Modify a produce.",
+	  *		requirements={
+	 * 			{
+	 *				"name"="id",
+	 *				"dataType"="integer",
+	 *				"requirement"="\d+",
+	 *				"description"="The produce unique identifier."
+     * 			}
+	 *		},
+     *      statusCodes={
+     *         201="Returned when modified",
+     *         401="Returned when the produce is not authorized",
+     *         404="Returned when request content is not found"
+     *     }
+	 * )
      */
      public function updateAction(Produces $produces, Produces $newProduces, ConstraintViolationList $violations)
      {
@@ -174,10 +223,33 @@ class ProducesController extends FOSRestController
      *     name = "app_produces_delete",
      *     requirements = {"id"="\d+"}
      * )
+     *
+     * @Doc\ApiDoc(
+	 *		section="Produces",
+	 *		resource=true,
+	 *		description="Delete a produce.",
+	  *		requirements={
+	 * 			{
+	 *				"name"="id",
+	 *				"dataType"="integer",
+	 *				"requirement"="\d+",
+	 *				"description"="The produce unique identifier."
+     * 			}
+	 *		},
+     *      statusCodes={
+     *         204="Returned when deleted",
+     *         401="Returned when the produce is not authorized",
+     *         404="Returned when request content is not found"
+     *     }
+	 * )
      */
     public function deleteAction(Produces $produces)
     {
-        $this->getDoctrine()->getManager()->remove($produces)->flush();
+        $em = $this->getDoctrine()->getManager();
+
+        $em->remove($produces);
+        
+        $em->flush();
 
         return;
     }

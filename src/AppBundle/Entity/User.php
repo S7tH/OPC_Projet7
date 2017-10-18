@@ -16,6 +16,26 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @Serializer\ExclusionPolicy("ALL")
  *
+ * @Hateoas\Relation("self",
+ *      href = "expr('http://127.0.0.1:8001/api/user/' ~ object.getId())"
+ * )
+ *
+ * @Hateoas\Relation("create",
+ *      href = @Hateoas\Route("app_user_create",
+ *      absolute = true
+ * ))
+ *
+ * @Hateoas\Relation("modify",
+ *      href = "expr('http://127.0.0.1:8001/api/user/' ~ object.getId())"
+ * )
+ *
+ * @Hateoas\Relation("delete",
+ *      href = "expr('http://127.0.0.1:8001/api/user/' ~ object.getId())"
+ * )
+ *
+ * @Hateoas\Relation("authenticated_user",
+ * embedded = @Hateoas\Embedded("expr(service('security.token_storage').getToken().getUser())")
+ * )
  */
 class User implements UserInterface
 {
@@ -57,6 +77,7 @@ class User implements UserInterface
      *
      * @Serializer\Expose
      * @Serializer\Since("1.0")
+     * @Assert\Email()
      */
     private $email;
 
@@ -73,7 +94,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(name="roles", type="array")
      * @Serializer\Expose
-     * @Serializer\Since("2.0")
+     * @Serializer\Since("1.0")
      */
     private $roles = array();
 
