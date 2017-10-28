@@ -68,7 +68,7 @@ class User implements UserInterface
      * @Serializer\Expose
      * @Serializer\Since("1.0")
      */
-    private $facebook_id;
+    private $facebookId;
 
     /**
      * @var string
@@ -98,10 +98,10 @@ class User implements UserInterface
      */
     private $roles = array();
 
-    public function __construct($username, $facebook_id, $email, $gender)
+    public function __construct($username, $facebookId, $email, $gender)
     {
         $this->username = $username;
-        $this->facebook_id = $facebook_id;
+        $this->facebookId = $facebookId;
         $this->email = $email;
         $this->gender = $gender;
     }
@@ -135,25 +135,26 @@ class User implements UserInterface
          return $this;
      }
 
-    public function getFacebook_id()
+    public function getFacebookId()
     {
-        return $this->facebook_id;
+        return $this->facebookId;
     }
 
     /**
-     * Set facebook_id
+     * Set facebookId
      *
-     * @param string $facebook_id
+     * @param string $facebookId
      *
      * @return User
      */
-     public function setFacebook_id($facebook_id)
-     {
-         $this->facebook_id = $facebook_id;
+    public function setFacebookId($facebookId)
+    {
+         $this->facebookId = $facebookId;
  
          return $this;
-     }
+    }
 
+    
     public function getEmail()
     {
         return $this->email;
@@ -208,30 +209,6 @@ class User implements UserInterface
 
     public function eraseCredentials()
     {
-    }
-
-    /**
-     * Set facebookId
-     *
-     * @param string $facebookId
-     *
-     * @return User
-     */
-    public function setFacebookId($facebookId)
-    {
-        $this->facebook_id = $facebookId;
-
-        return $this;
-    }
-
-    /**
-     * Get facebookId
-     *
-     * @return string
-     */
-    public function getFacebookId()
-    {
-        return $this->facebook_id;
     }
 
     /**
