@@ -58,7 +58,7 @@ class FacebookUserProvider implements UserProviderInterface
             if($checkUser != $user)
             {
                 $checkUser->setUsername($user->getUsername());
-                $checkUser->setFacebook_id($user->getFaceBook_id());
+                $checkUser->setFacebookId($user->getFaceBookId());
                 $checkUser->setGender($user->getGender());
                 $save = $this->em;
                 $save->persist($checkUser);

@@ -165,8 +165,6 @@ class ProducesController extends FOSRestController
          $em->flush();
  
          return $produces;
-         /*return $this->view($produces, Response::HTTP_CREATED, ['Location' => $this->generateUrl('app_produces_show',
-         ['id' => $produces->getId(), UrlGeneratorInterface::ABSOLUTE_URL])]);*/
      }
 
     /**
