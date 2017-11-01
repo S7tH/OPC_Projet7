@@ -53,4 +53,7 @@ After copied (clone or download) this repository github on your computer
 
             - php bin/console server:run 127.0.0.1:8002
 
-In prod mod, remove the file config.php in the web folder
+7) To use the api read the api documentation in /api/doc
+    Don't forget to get in the header as key: Authorization and as value: bearer=yourtokenaccess
+
+
