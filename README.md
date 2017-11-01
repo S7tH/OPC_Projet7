@@ -50,5 +50,7 @@ After copied (clone or download) this repository github on your computer
 
 7) To use the api read the api documentation in /api/doc. <br/>
     Don't forget to get in the header as key: Authorization and as value: bearer=yourtokenaccess
+    or again:
+    key: Content-Type value: application/json
     
 In prod mod, remove the file config.php in the web folder
