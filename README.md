@@ -42,16 +42,11 @@ After copied (clone or download) this repository github on your computer
     - Repeat the rule 1 by adding the facebook_client_id and facebook_client_secret
 
 
-6) After have configured an ip adress to each other, launch them servers
+6) After have configured an ip adress to the api, launch this server
     samples:
 
         api:
-
             - php bin/console server:run 127.0.0.1:8001
-
-        powerphone
-
-            - php bin/console server:run 127.0.0.1:8002
 
 7) To use the api read the api documentation in /api/doc. <br/>
     Don't forget to get in the header as key: Authorization and as value: bearer=yourtokenaccess  <br/>
