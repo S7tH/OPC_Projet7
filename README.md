@@ -2,6 +2,7 @@
  
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/d4c45487-6807-4567-b53d-3fb5655a51d5/big.png)](https://insight.sensiolabs.com/projects/d4c45487-6807-4567-b53d-3fb5655a51d5)
 
+(if this medal status is none, it's maybe a bug click on this to see the real result.)
 <br/>
 
 API in charge of the management of the mobile produces.
