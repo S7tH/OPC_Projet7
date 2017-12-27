@@ -54,3 +54,6 @@ After copied (clone or download) this repository github on your computer
     key: Content-Type value: application/json
     
 In prod mod, remove the file config.php in the web folder
+
+
+
